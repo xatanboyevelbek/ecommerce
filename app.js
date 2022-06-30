@@ -4,9 +4,17 @@ const bodyParser = require('body-parser');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const ejs = require('ejs');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const app = express();
+const MONGODB_URI = 'mongodb+srv://elbekkhatanboyev:27092001Elbek@cluster0.ch1k2.mongodb.net/ecommerce?retryWrites=true&w=majority';
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static(path.join(__dirname + '/public')));
+
+mongoose.connect(MONGODB_URI).then(() => {
+    app.listen(3000);
+}).catch(err => {
+    console.log(err);
+})
