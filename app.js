@@ -15,11 +15,13 @@ app.set('views', './views');
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(csrf());
-app.use(flash());
+// app.use(csrf());
+// app.use(flash());
+
+
 
 mongoose.connect(MONGODB_URI).then(() => {
     app.listen(3000);
 }).catch(err => {
     console.log(err);
-})
+});
