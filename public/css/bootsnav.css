@@ -521,7 +521,7 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content .content ul.menu-col li a:
     }
     
     nav.navbar.bootsnav ul.nav > li.dropdown > a.dropdown-toggle:after{
-        font-family: 'FontAwesome';
+        font-family: 'Font Awesome 5 free';
         content: "\f0d7";
         margin-left: 5px;
         margin-top: 2px;
@@ -563,15 +563,15 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content .content ul.menu-col li a:
         text-align: right;
     }
     
-    nav.navbar.bootsnav li.dropdown ul.dropdown-menu li.dropdown > a.dropdown-toggle:before{
-        font-family: 'FontAwesome';
+    nav.navbar.bootsnav li.dropdown ul.dropdown-menu li.dropdown > a.dropdown-toggle::before{
+        font-family: 'Font Awesome 5 free';
         float: right;
         content: "\f105";
         margin-top: 0;
     }
     
     nav.navbar.bootsnav ul.navbar-right li.dropdown ul.dropdown-menu li.dropdown > a.dropdown-toggle:before{
-        font-family: 'FontAwesome';
+        font-family: 'Font Awesome 5 free';
         float: left;
         content: "\f104";
         margin-top: 0;
@@ -926,8 +926,8 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content .content ul.menu-col li a:
         margin-top: 0;
     }
     
-    nav.bootsnav.navbar-sidebar ul.nav li.dropdown ul.dropdown-menu li.dropdown > a:before{
-        font-family: 'FontAwesome';
+    nav.bootsnav.navbar-sidebar ul.nav li.dropdown ul.dropdown-menu li.dropdown > a::before{
+        font-family: 'Font Awesome 5 free';
         content: "\f105";
         float: right;
     }
@@ -959,7 +959,7 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content .content ul.menu-col li a:
     }
     
     nav.bootsnav.navbar-sidebar .dropdown .megamenu-content .col-menu .title:before{
-        font-family: 'FontAwesome';
+        font-family: 'Font Awesome 5 free';
         content: "\f105";
         float: right;
     }
@@ -1030,8 +1030,8 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content .content ul.menu-col li a:
         float: none;
     }
     
-    nav.navbar.bootsnav li.dropdown a.dropdown-toggle:before{
-        font-family: 'FontAwesome';
+    nav.navbar.bootsnav li.dropdown a.dropdown-toggle::before{
+        font-family: 'Font Awesome 5 free';
         content: "\f105";
         float: right;
         font-size: 16px;
@@ -1136,8 +1136,8 @@ nav.navbar.bootsnav ul.dropdown-menu.megamenu-content .content ul.menu-col li a:
         padding: 8px 0;
     }
     
-   nav.navbar.bootsnav .dropdown .megamenu-content .col-menu .title:before{
-        font-family: 'FontAwesome';
+   nav.navbar.bootsnav .dropdown .megamenu-content .col-menu .title::before{
+    font-family: 'Font Awesome 5 free';
         content: "\f105";
         float: right;
         font-size: 16px;

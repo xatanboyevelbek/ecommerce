@@ -10,10 +10,11 @@ const app = express();
 const MONGODB_URI = 'mongodb+srv://elbekkhatanboyev:27092001Elbek@cluster0.ch1k2.mongodb.net/ecommerce?retryWrites=true&w=majority';
 const mainRoutes = require('./routes/mainRoutes');
 const shopRoutes = require('./routes/shopRoutes');
+let $ = require('jquery');
 
 app.set('view engine', 'ejs');
-app.set('views', './views');
-app.use(express.static(path.join(__dirname + '/public')));
+app.set('views', 'views');
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 // app.use(csrf());
