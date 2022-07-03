@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
 const csrf = require('csurf');
 const flash = require('connect-flash');
@@ -10,7 +9,6 @@ const app = express();
 const MONGODB_URI = 'mongodb+srv://elbekkhatanboyev:27092001Elbek@cluster0.ch1k2.mongodb.net/ecommerce?retryWrites=true&w=majority';
 const mainRoutes = require('./routes/mainRoutes');
 const shopRoutes = require('./routes/shopRoutes');
-let $ = require('jquery');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
