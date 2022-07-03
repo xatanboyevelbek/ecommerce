@@ -22,9 +22,9 @@ exports.postSignup = (req, res, next) => {
                 lastname: lastname,
                 password: hashedpassword
             });
-            return newUser.save();
-        }).then(() => {
-            return res.redirect('/login');
+            return newUser.save(() => {
+                res.redirect('/login');
+            });
         })
     })
 }
@@ -41,10 +41,19 @@ exports.postLogin = (req, res, next) => {
             return res.redirect('/signup');
         }
         return bcrypt.compare(password, user.password).then(compared => {
-            if(!compared){
-                return res.redirect('/login');
+            if(compared){
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+                return req.session.save(() => {
+                    res.redirect('/');
+                })
             }
-            return res.redirect('/')
+            res.redirect('/login');
         })
     })
+}
+exports.postLogout = (req, res, next) => {
+    req.session.destroy(() => {
+        return res.redirect('/');
+    });
 }

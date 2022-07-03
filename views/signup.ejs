@@ -75,8 +75,18 @@
                     </div>
                     <div class="our-link">
                         <ul>
-                            <li><a href="/login">Login</a></li>
-                            <li><a href="/signup" style="color: #d33b33;">Signup</a></li>
+                            <% if(!isAutenticated){ %>
+                                <li><a href="/login">Login</a></li>
+                                <li><a href="/signup" style="color: #dc3545;">Signup</a></li>
+                            <% } %>
+                            <% if(isAutenticated){ %>
+                                <li>
+                                    <form action="/logout" method="post">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        <button style="background: transparent; color: white; font-weight: 600; text-transform: uppercase; cursor: pointer;" type="submit">Logout</button>
+                                    </form>
+                                </li>
+                            <% } %>
                         </ul>
                     </div>
                 </div>
@@ -184,6 +194,9 @@
 						<i class="fa fa-shopping-bag"></i>
                             <span class="badge">3</span>
 					</a></li>
+                    <% if(isAutenticated){ %>
+                        <li class="myaccount"><a href="#"><i class="fa fa-user"></i></a></li>
+                    <% } %>
                     </ul>
                 </div>
                 <!-- End Atribute Navigation -->
@@ -235,6 +248,7 @@
             <label for="InputPassword1" class="mb-0">Password</label>
             <input type="password" class="form-control" name="password" id="InputPassword1" placeholder="Password"> </div>
        </div>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <button type="submit" class="btn hvr-hover">Register</button>
    </form>
     <!-- Start Footer  -->
