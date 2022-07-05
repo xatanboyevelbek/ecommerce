@@ -22,6 +22,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({secret: 'my secret', resave: false, saveUninitialized: true, store: store}));
 app.use(csrf());
+app.use(flash());
 
 app.use((req, res, next) => {
     if(!req.session.user){
