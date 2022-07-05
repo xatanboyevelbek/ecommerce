@@ -13,6 +13,7 @@ exports.postSignup = (req, res, next) => {
     const password = req.body.password;
     User.findOne({email: email}).then(user => {
         if(user){
+            req.flash('error','Email is already exists');
             return res.redirect('/signup');
         }
         return bcrypt.hash(password, 12).then(hashedpassword => {
@@ -38,7 +39,8 @@ exports.postLogin = (req, res, next) => {
     const password = req.body.password;
     User.findOne({email: email}).then(user => {
         if(!user) {
-            return res.redirect('/signup');
+            req.flash('error','Email is not exists. Please log in first');
+            return res.redirect('/login');
         }
         return bcrypt.compare(password, user.password).then(compared => {
             if(compared){
@@ -48,6 +50,7 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/');
                 })
             }
+            req.flash('error','Password is wrong');
             res.redirect('/login');
         })
     })

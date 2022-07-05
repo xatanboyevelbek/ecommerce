@@ -39,6 +39,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     res.locals.isAutenticated = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
+    res.locals.errorMessage = req.flash('error');
     next();
 })
 
