@@ -1,13 +1,14 @@
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const sendgridTransport = require('nodemailer-sendgrid-transport');
 const User = require('../model/user');
 
-const transporter = nodemailer.createTransport(sendgridTransport({
+const transporter = nodemailer.createTransport({
+    service: 'hotmail',
     auth: {
-        api_key: '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'
+        user: 'theshopway@outlook.com',
+        pass: '27092001Elbek@'
     }
-}));
+});
 
 exports.getSignup = (req, res, next) => {
     res.render('signup', {
@@ -15,10 +16,7 @@ exports.getSignup = (req, res, next) => {
     })
 }
 exports.postSignup = (req, res, next) => {
-    const firstname = req.body.firstname;
-    const lastname = req.body.lastname;
-    const email = req.body.email;
-    const password = req.body.password;
+    const {firstname, lastname, email, password} = req.body;
     User.findOne({email: email}).then(user => {
         if(user){
             req.flash('error','Email is already exists');
@@ -36,9 +34,9 @@ exports.postSignup = (req, res, next) => {
             res.redirect('/login');
             return transporter.sendMail({
                 to: email,
-                from: 'ecommerce@elbekkhatanboyev.com',
+                from: 'theshopway@outlook.com',
                 subject: 'Sign up succeeded!',
-                html: `<h1>Dear ${firstname} ${lastname}. You successfuly signed up!!!`
+                html: `<p>Dear ${firstname} ${lastname}. You successfuly signed up!!!</p>`
             });
         })
     })
