@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Site Metas -->
-    <title>ThewayShop - Ecommerce Bootstrap 4 HTML Template</title>
+    <title>Reset Password</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -97,22 +97,15 @@
     <div class="mt-4">
         <p style="text-align: center; color: red; font-size: 19px;"><%= errorMessage %></p>
     </div>
-   <form action="/login" style="display: block; margin: 0 auto;" method="post" class=" form form-control mt-2 p-4 mb-4 col-lg-8 col-md-6 col-sm-11 col-xs-11 review-form-box" id="formRegister">
+   <form action="/reset" style="display: block; margin: 0 auto;" method="post" class=" form form-control mt-2 p-4 mb-4 col-lg-8 col-md-6 col-sm-11 col-xs-11 review-form-box" id="formRegister">
         <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-8">
                 <label for="InputEmail" class="mb-0">Email Address</label>
                 <input type="email" class="form-control" name="email" id="InputEmail" placeholder="Enter Email"> 
             </div>
-            <div class="form-group col-md-6">
-                <label for="InputPassword" class="mb-0">Password</label>
-                <input type="password" class="form-control" name="password" id="InputPassword" placeholder="Password"> 
-            </div>
-        </div>
-        <div class="ml-1 mb-3">
-            <a href="/reset" style="color: #202020; font-size: 14px;">Forgot your password?</a>
         </div>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <button type="submit" class="btn hvr-hover">Login</button>
+        <button type="submit" class="btn hvr-hover">Reset password</button>
    </form>
 </body>
 </html>

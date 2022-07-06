@@ -72,3 +72,11 @@ exports.postLogout = (req, res, next) => {
         return res.redirect('/');
     });
 }
+exports.getReset = (req, res, next) => {
+   res.render('reset', {
+    title: 'Reset Password'
+   })
+}
+exports.postReset = (req, res, next) => {
+    
+}
