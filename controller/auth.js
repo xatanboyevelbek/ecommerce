@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 const User = require('../model/user');
 
 const transporter = nodemailer.createTransport({
@@ -78,5 +79,35 @@ exports.getReset = (req, res, next) => {
    })
 }
 exports.postReset = (req, res, next) => {
-    
+    crypto.randomBytes(32, (err, buffer) => {
+        if(err){
+            return res.redirect('/reset');
+        }
+        const token = buffer.toString('hex');
+        User.findOne({email: req.body.email}).then(user => {
+            if(!user){
+                req.flash('error','No account with that email found');
+                return res.redirect('/reset');
+            }
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+            return user.save();
+        }).then(() => {
+            res.redirect('/');
+            return transporter.sendMail({
+                to: req.body.email,
+                from: 'theshopway@outlook.com',
+                subject: 'Reset Password',
+                html: `<html>
+                          <body>
+                            <h4>Dear client. You requested to reset your current password<h4>
+                            <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set new password</p>
+                            <p>Theshopway community</p>
+                          </body>
+                       </html>`
+            });
+        }).catch(err => {
+            console.log(err);
+        })
+   })
 }
