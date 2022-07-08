@@ -97,7 +97,7 @@
     <div class="mt-4">
         <p style="text-align: center; color: red; font-size: 19px;"><%= errorMessage %></p>
     </div>
-   <form action="/signup" style="display: block; margin: 0 auto;" method="post" class=" form form-control p-4 mt-4 mb-4 col-lg-8 col-md-6 col-sm-11 col-xs-11 review-form-box" id="formRegister">
+   <form action="/signup" novalidate style="display: block; margin: 0 auto;" method="post" class=" form form-control p-4 mt-4 mb-4 col-lg-8 col-md-6 col-sm-11 col-xs-11 review-form-box" id="formRegister">
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="InputName" class="mb-0">First Name</label>
@@ -111,6 +111,10 @@
         <div class="form-group col-md-6">
             <label for="InputPassword1" class="mb-0">Password</label>
             <input type="password" class="form-control" name="password" id="InputPassword1" placeholder="Password"> </div>
+       </div>
+       <div class="form-group col-md-6">
+            <label for="InputPassword1" class="mb-0">Confirm password</label>
+            <input type="password" class="form-control" name="confirmPassword" id="InputPassword1" placeholder="Confirm password"> </div>
        </div>
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <button type="submit" class="btn hvr-hover">Register</button>

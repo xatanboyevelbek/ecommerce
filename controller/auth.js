@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const {validationResult} = require('express-validator');
 const User = require('../model/user');
 
 const transporter = nodemailer.createTransport({
@@ -18,6 +19,13 @@ exports.getSignup = (req, res, next) => {
 }
 exports.postSignup = (req, res, next) => {
     const {firstname, lastname, email, password} = req.body;
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(422).render('signup', {
+            title: "Signup",
+            errorMessage: errors.array()[0].msg
+        })
+    }
     User.findOne({email: email}).then(user => {
         if(user){
             req.flash('error','Email is already exists');
@@ -125,16 +133,19 @@ exports.postNewpassword = (req, res, next) => {
     const newpassword =  req.body.newpassword;
     const userid = req.body.userid;
     const passwordToken = req.body.passwordToken;
-    User.findOne({_id: userid, resetToken: passwordToken, resetTokenExpiration: Date.now()}).then(user => {
-        return bcrypt.hash(newpassword, 12).then(hashedPassword => {
-            user.password = hashedPassword;
-            user.resetToken = undefined,
-            user.resetTokenExpiration = undefined;
-            return user.save();
+    let resetuser;
+
+    User.findOne({_id: userid, resetToken: passwordToken, resetTokenExpiration: {$gt: Date.now()}}).then(user => {
+            resetuser = user;
+            return bcrypt.hash(newpassword, 12);
+        }).then(hashedPassword => {
+            resetuser.password = hashedPassword;
+            resetuser.resetToken = undefined,
+            resetuser.resetTokenExpiration = undefined;
+            return resetuser.save();
         }).then(() => {
             res.redirect('/login');
+        }).catch(err => {
+            console.log(err);
         })
-    }).catch(err => {
-        console.log(err);
-    })
 }
