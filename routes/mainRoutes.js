@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const {check, body} = require('express-validator');
 const router = express.Router();
 const pagesController = require('../controller/pages');
@@ -17,8 +18,8 @@ router.post('/signup',
                 return Promise.reject('Email is exits. Please enter another one');
             }
         })
-    }),
-       body('password', 'Please enter longer password').isLength({min: 5}),
+    }).normalizeEmail(),
+       body('password').isLength({min: 5}).withMessage('Please enter longer password'),
        body('confirmPassword').custom((value, {req}) => {
         if(value !== req.body.password){
             throw new Error('Password have to match');
@@ -27,21 +28,14 @@ router.post('/signup',
        })
     ], authController.postSignup);
 router.get('/login', authController.getLogin);
-router.post('/login', 
+router.post('/login',
     [ check('email').isEmail().custom((value, {req}) => {
         return User.findOne({email: value}).then(user => {
             if(!user){
                 return Promise.reject('Email is not exits. Please sign up first');
             }
         })
-      }),
-      body('password').custom((value, {req}) => {
-        return User.findOne({password: value}).then(user => {
-            if(!user){
-                return Promise.reject('Password went wrong');
-            }
-        })
-      })
+      }).normalizeEmail()
     ]
     ,authController.postLogin);
 router.post('/logout', authController.postLogout);

@@ -26,7 +26,7 @@ exports.getSignup = (req, res, next) => {
 }
 
 exports.postSignup = (req, res, next) => {
-    const { firstname, lastname, email, password, confirmPassword } = req.body;
+    const {firstname, lastname, email, password, confirmPassword} = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).render('signup', {
@@ -71,7 +71,8 @@ exports.getLogin = (req, res, next) => {
 }
 
 exports.postLogin = (req, res, next) => {
-    const {email, password} = req.body;
+    const email = req.body.email;
+    const password = req.body.password;
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(422).render('login', {
@@ -92,6 +93,7 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/');
                 })
             }
+            res.redirect('/login');
         })
     })
 }
