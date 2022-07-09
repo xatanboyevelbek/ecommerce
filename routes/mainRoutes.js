@@ -3,6 +3,7 @@ const {check, body} = require('express-validator');
 const router = express.Router();
 const pagesController = require('../controller/pages');
 const authController = require('../controller/auth');
+const User = require('../model/user');
 
 router.get('/', pagesController.index);
 router.get('/contact-us', pagesController.contactus);
@@ -11,10 +12,11 @@ router.get('/services', pagesController.services);
 router.get('/signup', authController.getSignup);
 router.post('/signup', 
     [ check('email').isEmail().withMessage('Please enter valid email').custom((value, {req}) => {
-        if(value === 'aaa@gmail.com'){
-            throw new Error('Email is forbidden');
-        }
-        return true;
+        return User.findOne({email: value}).then(user => {
+            if(user){
+                return Promise.reject('Email is exits. Please enter another one');
+            }
+        })
     }),
        body('password', 'Please enter longer password').isLength({min: 5}),
        body('confirmPassword').custom((value, {req}) => {
