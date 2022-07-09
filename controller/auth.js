@@ -24,6 +24,7 @@ exports.getSignup = (req, res, next) => {
         }
     })
 }
+
 exports.postSignup = (req, res, next) => {
     const { firstname, lastname, email, password, confirmPassword } = req.body;
     const errors = validationResult(req);
@@ -59,32 +60,41 @@ exports.postSignup = (req, res, next) => {
     })
 }
 
-    exports.getLogin = (req, res, next) => {
-        res.render('login', {
-            title: 'Log in'
-        })
-    }
-    exports.postLogin = (req, res, next) => {
-        const email = req.body.email;
-        const password = req.body.password;
-        User.findOne({ email: email }).then(user => {
-            if (!user) {
-                req.flash('error', 'Email is not exists. Please log in first');
-                return res.redirect('/login');
+exports.getLogin = (req, res, next) => {
+    res.render('login', {
+        title: 'Log in',
+        oldInputs: {
+            email: '',
+            password: ''
+        }
+    })
+}
+
+exports.postLogin = (req, res, next) => {
+    const {email, password} = req.body;
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(422).render('login', {
+            title: 'Login',
+            errorMessage: errors.array()[0].msg,
+            oldInputs: {
+                email,
+                password
             }
-            return bcrypt.compare(password, user.password).then(compared => {
-                if (compared) {
-                    req.session.isLoggedIn = true;
-                    req.session.user = user;
-                    return req.session.save(() => {
-                        res.redirect('/');
-                    })
-                }
-                req.flash('error', 'Password is wrong');
-                res.redirect('/login');
-            })
         })
     }
+    User.findOne({ email: email }).then(user => {
+        bcrypt.compare(password, user.password).then(compared => {
+            if (compared) {
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+                return req.session.save(() => {
+                    res.redirect('/');
+                })
+            }
+        })
+    })
+}
     exports.postLogout = (req, res, next) => {
         req.session.destroy(() => {
             return res.redirect('/');

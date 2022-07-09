@@ -27,7 +27,23 @@ router.post('/signup',
        })
     ], authController.postSignup);
 router.get('/login', authController.getLogin);
-router.post('/login', authController.postLogin);
+router.post('/login', 
+    [ check('email').isEmail().custom((value, {req}) => {
+        return User.findOne({email: value}).then(user => {
+            if(!user){
+                return Promise.reject('Email is not exits. Please sign up first');
+            }
+        })
+      }),
+      body('password').custom((value, {req}) => {
+        return User.findOne({password: value}).then(user => {
+            if(!user){
+                return Promise.reject('Password went wrong');
+            }
+        })
+      })
+    ]
+    ,authController.postLogin);
 router.post('/logout', authController.postLogout);
 router.get('/reset', authController.getReset);
 router.post('/reset', authController.postReset);
