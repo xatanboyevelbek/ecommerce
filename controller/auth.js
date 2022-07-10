@@ -26,7 +26,7 @@ exports.getSignup = (req, res, next) => {
 }
 
 exports.postSignup = (req, res, next) => {
-    const {firstname, lastname, email, password, confirmPassword} = req.body;
+    const { firstname, lastname, email, password, confirmPassword } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).render('signup', {
@@ -74,7 +74,7 @@ exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()) {
         return res.status(422).render('login', {
             title: 'Login',
             errorMessage: errors.array()[0].msg,
@@ -97,76 +97,81 @@ exports.postLogin = (req, res, next) => {
         })
     })
 }
-    exports.postLogout = (req, res, next) => {
-        req.session.destroy(() => {
-            return res.redirect('/');
-        });
-    }
-    exports.getReset = (req, res, next) => {
-        res.render('reset', {
-            title: 'Reset Password'
-        })
-    }
-    exports.postReset = (req, res, next) => {
-        crypto.randomBytes(32, (err, buffer) => {
-            if (err) {
+
+exports.postLogout = (req, res, next) => {
+    req.session.destroy(() => {
+        return res.redirect('/');
+    });
+}
+
+exports.getReset = (req, res, next) => {
+    res.render('reset', {
+        title: 'Reset Password'
+    })
+}
+
+exports.postReset = (req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            return res.redirect('/reset');
+        }
+        const token = buffer.toString('hex');
+        User.findOne({ email: req.body.email }).then(user => {
+            if (!user) {
+                req.flash('error', 'No account with that email found');
                 return res.redirect('/reset');
             }
-            const token = buffer.toString('hex');
-            User.findOne({ email: req.body.email }).then(user => {
-                if (!user) {
-                    req.flash('error', 'No account with that email found');
-                    return res.redirect('/reset');
-                }
-                user.resetToken = token;
-                user.resetTokenExpiration = Date.now() + 3600000;
-                return user.save();
-            }).then(() => {
-                res.redirect('/');
-                return transporter.sendMail({
-                    to: req.body.email,
-                    from: 'theshopway@outlook.com',
-                    subject: 'Reset Password',
-                    html: `<html>
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now() + 3600000;
+            return user.save();
+        }).then(() => {
+            res.redirect('/');
+            return transporter.sendMail({
+                to: req.body.email,
+                from: 'theshopway@outlook.com',
+                subject: 'Reset Password',
+                html: `<html>
                           <body>
                             <h4>Dear client. You requested to reset your current password<h4>
                             <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set new password</p>
                             <p>Theshopway community</p>
                           </body>
                        </html>`
-                });
-            }).catch(err => {
-                console.log(err);
-            })
-        })
-    }
-    exports.getNewpassword = (req, res, next) => {
-        const token = req.params.token;
-        User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }).then(user => {
-            res.render('newpassword', {
-                title: 'Update password',
-                userId: user?._id.toString(),
-                passwordToken: token
-            })
-        })
-    }
-    exports.postNewpassword = (req, res, next) => {
-        const newpassword = req.body.newpassword;
-        const userid = req.body.userid;
-        const passwordToken = req.body.passwordToken;
-        let resetuser;
-
-        User.findOne({ _id: userid, resetToken: passwordToken, resetTokenExpiration: { $gt: Date.now() } }).then(user => {
-            resetuser = user;
-            return bcrypt.hash(newpassword, 12);
-        }).then(hashedPassword => {
-            resetuser.password = hashedPassword;
-            resetuser.resetToken = undefined,
-            resetuser.resetTokenExpiration = undefined;
-            return resetuser.save();
-        }).then(() => {
-            res.redirect('/login');
+            });
         }).catch(err => {
             console.log(err);
         })
-    }
+    })
+}
+
+exports.getNewpassword = (req, res, next) => {
+    const token = req.params.token;
+    User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } }).then(user => {
+        res.render('newpassword', {
+            title: 'Update password',
+            userId: user?._id.toString(),
+            passwordToken: token
+        })
+    })
+}
+
+exports.postNewpassword = (req, res, next) => {
+    const newpassword = req.body.newpassword;
+    const userid = req.body.userid;
+    const passwordToken = req.body.passwordToken;
+    let resetuser;
+
+    User.findOne({ _id: userid, resetToken: passwordToken, resetTokenExpiration: { $gt: Date.now() } }).then(user => {
+        resetuser = user;
+        return bcrypt.hash(newpassword, 12);
+    }).then(hashedPassword => {
+        resetuser.password = hashedPassword;
+        resetuser.resetToken = undefined,
+            resetuser.resetTokenExpiration = undefined;
+        return resetuser.save();
+    }).then(() => {
+        res.redirect('/login');
+    }).catch(err => {
+        console.log(err);
+    })
+}
