@@ -97,7 +97,7 @@
     <div class="mt-4">
         <p style="text-align: center; color: red; font-size: 19px;"><%= errorMessage %></p>
     </div>
-   <form action="/login" style="display: block; margin: 0 auto;" method="post" class=" form form-control mt-2 p-4 mb-4 col-lg-8 col-md-6 col-sm-11 col-xs-11 review-form-box" id="formRegister">
+   <form action="/login" style="display: block; margin: 0 auto;" method="post" class=" form form-control mt-2 p-4 mb-4 col-lg-8 col-md-6 col-sm-11 col-xs-11 review-form-box" id="formRegister" enctype="multipart/form-data">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="InputEmail" class="mb-0">Email Address</label>
@@ -106,6 +106,10 @@
             <div class="form-group col-md-6">
                 <label for="InputPassword" class="mb-0">Password</label>
                 <input type="password" class="form-control" name="password" id="InputPassword" placeholder="Password" value="<%= oldInputs.password %>"> 
+            </div>
+            <div class="form-group col-md-6">
+                <label for="file" class="mb-0">File</label>
+                <input type="file" class="form-control" name="file" id="file" placeholder="File"> 
             </div>
         </div>
         <div class="ml-1 mb-3">

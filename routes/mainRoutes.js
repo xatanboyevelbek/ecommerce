@@ -29,13 +29,13 @@ router.post('/signup',
     ], authController.postSignup);
 router.get('/login', authController.getLogin);
 router.post('/login',
-    [ check('email').isEmail().custom((value, {req}) => {
+    [ check('email').normalizeEmail().isEmail().custom((value, {req}) => {
         return User.findOne({email: value}).then(user => {
             if(!user){
                 return Promise.reject('Email is not exits. Please sign up first');
             }
         })
-      }).normalizeEmail()
+      })
     ]
     ,authController.postLogin);
 router.post('/logout', authController.postLogout);
@@ -43,5 +43,6 @@ router.get('/reset', authController.getReset);
 router.post('/reset', authController.postReset);
 router.get('/reset/:token', authController.getNewpassword);
 router.post('/new_password', authController.postNewpassword);
+router.get('/privacy-policy', pagesController.privacyPolicy);
 
 module.exports = router;

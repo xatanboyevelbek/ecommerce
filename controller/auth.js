@@ -73,6 +73,17 @@ exports.getLogin = (req, res, next) => {
 exports.postLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+    const file = req.file;
+    if(!file){ 
+        return res.status(422).render('login', {
+            title: 'Login',
+            errorMessage: "Attached file is not image",
+            oldInputs: {
+                email,
+                password
+            }
+        })
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).render('login', {
