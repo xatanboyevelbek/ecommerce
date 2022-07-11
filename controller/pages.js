@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const PDFDocument = require('pdfkit');
 
 exports.index = (req, res, next) => {
     res.render('index', {
@@ -22,13 +23,16 @@ exports.services = (req, res, next) => {
     })
 }
 exports.privacyPolicy = (req, res, next) => {
-    const file = path.join(process.cwd(), 'invoice', 'privacypolicy.pdf');
-    fs.readFile(file, (err, data) => {
-        if(err) {
-            return res.status(500).send('Could download this file');
-        }
-        res.setHeader('Content-type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=application.pdf');
-        res.send(data);
-    })
+    const document = path.join(process.cwd(), 'invoice', 'privacypolicy.pdf');
+    const pdfkit = new PDFDocument();
+    res.setHeader('Content-type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=application.pdf');
+    pdfkit.pipe(fs.createWriteStream(document));
+    pdfkit.pipe(res);
+    pdfkit.fontSize(34).text('Privacy Policy', {
+        underline: true,
+        width: 300
+    });
+    pdfkit.addPage().fillColor('blue');
+    pdfkit.end();
 }
